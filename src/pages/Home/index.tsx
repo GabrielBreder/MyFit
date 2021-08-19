@@ -6,6 +6,8 @@ import { FAB } from "react-native-elements";
 import { Feather } from "@expo/vector-icons";
 import { FlatList, Text } from "react-native";
 
+import { useData } from "../../hooks/data";
+
 import {
   Container,
   HeaderContainer,
@@ -19,20 +21,7 @@ import ItemList from "../../components/ItemList";
 
 const Home: React.FC = () => {
   const navigation = useNavigation();
-  const data = [
-    {
-      id: "a",
-      name: "pao",
-      kcal: 400,
-      date: moment(),
-    },
-    {
-      id: "b",
-      name: "arroz",
-      kcal: 350,
-      date: moment(),
-    },
-  ];
+  const { handleChangeDate, currentList, currentKcal } = useData();
 
   const handleOneNewItem = (): void => {
     navigation.navigate("NewItem");
@@ -58,7 +47,7 @@ const Home: React.FC = () => {
           disabledDateNameStyle={{ color: "grey" }}
           disabledDateNumberStyle={{ color: "grey" }}
           iconContainer={{ flex: 0.1 }}
-          onDateSelected={() => null}
+          onDateSelected={handleChangeDate}
           startingDate={moment().subtract(3, "days")}
           selectedDate={moment()}
           scrollerPaging={true}
@@ -67,13 +56,13 @@ const Home: React.FC = () => {
         />
         <HeaderTitle>Consumido no dia</HeaderTitle>
         <HeaderContainerHighlight>
-          <HeaderTextCounterHighlight>100</HeaderTextCounterHighlight>
+          <HeaderTextCounterHighlight>{currentKcal}</HeaderTextCounterHighlight>
           <HeaderTextHighlight>/kcal</HeaderTextHighlight>
         </HeaderContainerHighlight>
       </HeaderContainer>
       <BodyContainer>
         <FlatList
-          data={data}
+          data={currentList}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <ItemList item={item} />}
         />
